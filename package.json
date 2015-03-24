@@ -15,5 +15,8 @@
     "notification"
   ],
   "author": "Denis Zatsepin <denis@zatsepin.spb.ru> (http://zatsepin.spb.ru)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp-less": "^3.0.2"
+  }
 }
