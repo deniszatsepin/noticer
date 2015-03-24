@@ -1,0 +1,25 @@
+{
+  "name": "noticer",
+  "version": "0.0.1",
+  "authors": [
+    "Denis Zatsepin <denis@zatsepin.spb.ru>"
+  ],
+  "description": "Noticer is a configurable notification module for AngularJS",
+  "main": "index.js",
+  "keywords": [
+    "angular",
+    "notification"
+  ],
+  "license": "MIT",
+  "homepage": "http://zatsepin.spb.ru",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "animate.css": "~3.2.6"
+  }
+}

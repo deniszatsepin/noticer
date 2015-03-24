@@ -1,0 +1,19 @@
+{
+  "name": "noticer",
+  "version": "0.0.1",
+  "description": "Noticer is a configurable notification module for AngularJS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gitrepo"
+  },
+  "keywords": [
+    "angular",
+    "notification"
+  ],
+  "author": "Denis Zatsepin <denis@zatsepin.spb.ru> (http://zatsepin.spb.ru)",
+  "license": "MIT"
+}
