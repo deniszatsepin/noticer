@@ -9,7 +9,7 @@
 
 	function $noticerProvider() {
 
-		this.$get = ['$window', '$q', 'noticer.browser', 'noticer.indom', 'noticer.history'];
+		this.$get = ['$window', '$q', 'noticer.browser', 'noticer.dom', 'noticer.history'];
 
 	}
 
