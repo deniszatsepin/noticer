@@ -17,30 +17,70 @@
 
 	}
 
+  var MAX_NOTICES_IN_QUEUE = 10;
+  var MAX_NOTICES = 100;
+
 	function NoticerDomRenderFactory($window, $document, $q) {
-		var notifications_queue = {
-			'error': [],
-			'warning': [],
-			'info': []
-		};
+    var allNotifications = [];
+		var notificationQueues = {};
 		var subscribers = {};
 
-		function notify(note) {
-			var notification = angular.extend({
-				type: 'info',
-				title: 'Info',
-				body: 'Your notification should be here...'
-			}, note);
+		function notify(note, route, level) {
+			route = route || '';
+      level = level || 'info';
 
-			_emit(notification);
+      var queue = notificationQueues[route] = notificationQueues[route] || [];
+
+      var notification = {
+        route: route,
+        level: level,
+        body: note,
+        read: false
+      };
+
+      push(queue, notification);
+
+      push(allNotifications, notification, MAX_NOTICES);
+
+			emit(notification);
 		}
 
-		function _emit(notice) {
+    function push(queue, notification, max) {
+      var MAX = max || MAX_NOTICES_IN_QUEUE;
+      if (queue.length > MAX) {
+        var removed = queue.shift();
+        if (max) {
+          var queue = notificationQueues[notification.route];
+          if (queue) {
+            _.remove(queue, function(el) {
+              el === removed;
+            });
+          }
+        } else {
+          _.remove(allNotifications, function(el) {
+            el === remove;
+          });
+        }
+      }
+      queue.push(notification);
+    }
+
+    function flush() {
+      allNotifications.length = 0;
+      var routes = Object.keys(notificationQueues);
+      _.each(routes, function(route) {
+        delete notificationQueues[route];
+      });
+    }
+
+		function emit(notification) {
+      var route = notification.route;
 			var listeners = subscribers[route];
-			if (angular.isArray(listeners)) {
-				angular.forEach(listeners, function(listener) {
+			if (_.isArray(listeners)) {
+				_.each(listeners, function(listener) {
 					if (typeof listener === 'function') {
-						listener.call(null, notice);
+            notification.read = true;
+						listener.call(null, _.clone(notification));
 					}
 				});
 			}
@@ -56,7 +96,7 @@
 
 		function unsubscribe(route, callback) {
 			var listeners = subscribers[route];
-			if (angular.isArray(listeners)) {
+			if (_.isArray(listeners)) {
 				var idx = listeners.indexOf(callback);
 				if (idx >= 0) {
 					listeners.splice(idx, 1);
@@ -64,10 +104,27 @@
 			}
 		}
 
+    function getUnread(route) {
+      route = route || '';
+      var queue = notificationQueues[route];
+      if (!queue.length) return [];
+
+      return _.map(queue, function(notice) {
+        if (!notice.read) {
+          notice.read = true;
+          return _.clone(notice);
+        }
+      });
+    }
+
 		return {
 			notify: notify,
+      flush: flush,
 			on: subscribe,
-			off: unsubscribe
+			off: unsubscribe,
+      getUnread: getUnread,
+      _forTestsNotificationsQueues: notificationQueues,
+      _forTestsAllNotifications: allNotifications
 		};
 	}
 

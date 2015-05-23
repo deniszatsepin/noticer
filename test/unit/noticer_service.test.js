@@ -33,4 +33,26 @@ describe('Noticer render unit tests', function() {
 		expect(service.off).toBeDefined();
 		expect(typeof service.off).toEqual('function');
 	});
+
+	it('should add notice to the queue', function() {
+		service.notify('hello');
+		expect(service._forTestsAllNotifications.length).toBeGreaterThan(0);
+		expect(service._forTestsNotificationsQueues['']).toBeDefined();
+		expect(service._forTestsNotificationsQueues[''].length).toBeGreaterThan(0);
+	});
+
+	it('should remove all queues', function() {
+		service.flush();
+		expect(service._forTestsAllNotifications.length).toEqual(0);
+	});
+
+	it('should add notice to specified route', function() {
+		var route = 'user/avatar';
+		service.flush();
+		service.notify('info', route);
+
+		expect(service._forTestsNotificationsQueues[route]).toBeDefined();
+		expect(service._forTestsNotificationsQueues[route].length).toBeGreaterThan(0);
+	});
+
 });
