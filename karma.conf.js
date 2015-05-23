@@ -15,9 +15,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'src/bower_components/lodash/lodash.js',
       'src/bower_components/angular/angular.js',
       'src/bower_components/angular-mocks/angular-mocks.js',
       'src/javascripts/**/*.js',
+      'src/templates/**/*.html',
       'test/unit/*.js'
     ],
 
@@ -30,6 +32,12 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'src/templates/**/*.html': ['ng-html2js']
+    },
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'src/',
+      moduleName: 'noticer.templates'
     },
 
 

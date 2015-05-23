@@ -24,13 +24,13 @@ describe('Noticer render unit tests', function() {
 		expect(typeof service.notify).toEqual('function');
 	});
 
-	it('should have subscribe method', function() {
-		expect(service.subscribe).toBeDefined();
-		expect(typeof service.subscribe).toEqual('function');
+	it('should have an on method', function() {
+		expect(service.on).toBeDefined();
+		expect(typeof service.on).toEqual('function');
 	});
 
-	it('should have notice method', function() {
-		expect(service.unsubscribe).toBeDefined();
-		expect(typeof service.unsubscribe).toEqual('function');
+	it('should have an off method', function() {
+		expect(service.off).toBeDefined();
+		expect(typeof service.off).toEqual('function');
 	});
 });

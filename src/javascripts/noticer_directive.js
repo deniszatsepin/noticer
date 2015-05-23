@@ -13,11 +13,11 @@
 
 		return {
 			scope: {
-				route: '=noticerRoute',
-				level: '=noticerLevel'
+				route: '@noticerRoute',
+				level: '@noticerLevel'
 			},
 
-			templateUrl: '/templates/notification.html',
+			templateUrl: 'templates/notification.html',
 
 			controller: ['$scope', function($scope) {
         _.assign($scope, {
@@ -28,7 +28,7 @@
         init();
 
 				function init() {
-					if ($scope.route.length) {
+					if ($scope.route && $scope.route.length) {
 						Noticer.on($scope.route.length, noticeHandler);
             getPendingNotifications();
 					}
@@ -50,7 +50,6 @@
 			}],
 
 			link: function($scope, $element) {
-
 			}
 		}
 	}

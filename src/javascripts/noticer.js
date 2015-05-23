@@ -3,4 +3,4 @@
  * on 09.04.15.
  */
 
-angular.module('noticer', []);
+angular.module('noticer', ['noticer.templates']);
