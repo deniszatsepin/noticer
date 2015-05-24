@@ -100,6 +100,9 @@
 				var idx = listeners.indexOf(callback);
 				if (idx >= 0) {
 					listeners.splice(idx, 1);
+          if (listeners.length === 0) {
+            delete subscribers[route];
+          }
 				}
 			}
 		}
@@ -124,7 +127,8 @@
 			off: unsubscribe,
       getUnread: getUnread,
       _forTestsNotificationsQueues: notificationQueues,
-      _forTestsAllNotifications: allNotifications
+      _forTestsAllNotifications: allNotifications,
+      _forTestsSubscribers: subscribers
 		};
 	}
 

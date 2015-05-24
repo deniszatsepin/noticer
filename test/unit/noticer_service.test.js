@@ -42,6 +42,7 @@ describe('Noticer render unit tests', function() {
 	});
 
 	it('should remove all queues', function() {
+    service.notify('hello');
 		service.flush();
 		expect(service._forTestsAllNotifications.length).toEqual(0);
 	});
@@ -54,5 +55,32 @@ describe('Noticer render unit tests', function() {
 		expect(service._forTestsNotificationsQueues[route]).toBeDefined();
 		expect(service._forTestsNotificationsQueues[route].length).toBeGreaterThan(0);
 	});
+
+  function handler() {}
+  it('should subscribe on notifications', function() {
+    service.on('user/avatar', handler);
+
+    expect(service._forTestsSubscribers['user/avatar']).toBeDefined();
+    expect(service._forTestsSubscribers['user/avatar'].length).toBeGreaterThan(0);
+  });
+
+  it('should unsubscribe from notifications', function() {
+    service.on('user/avatar', handler);
+    service.off('user/avatar', handler);
+
+    expect(service._forTestsSubscribers['user/avatar']).toBeUndefined();
+  });
+
+  it('should emit notification', function() {
+    var handlers = {
+      onLoaded: function() {}
+    };
+
+    spyOn(handlers, 'onLoaded');
+    service.on('user/avatar', handlers.onLoaded);
+    service.notify('loaded', 'user/avatar');
+
+    expect(handlers.onLoaded).toHaveBeenCalled();
+  });
 
 });
