@@ -28,22 +28,24 @@
         init();
 
 				function init() {
-					if ($scope.route && $scope.route.length) {
-						Noticer.on($scope.route.length, noticeHandler);
-            getPendingNotifications();
-					}
+					var route = $scope.curRoute = $scope.route || '';
+					Noticer.on(route, noticeHandler);
+					getPendingNotifications();
 				}
 
         function getPendingNotifications() {
-
+					var unread = Noticer.getUnread($scope.curRoute);
+					_.each(unread, function(notice) {
+						$scope.notifications.push(notice);
+					});
         }
 
 				function noticeHandler(notification) {
-
+					$scope.notifications.push(notification);
 				}
 
 				function scopeDestroyHandler() {
-					Noticer.off($scope.route.length, noticeHandler);
+					Noticer.off($scope.curRoute, noticeHandler);
 				}
 
 				$scope.$on('$destroy', scopeDestroyHandler);

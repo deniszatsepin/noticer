@@ -92,6 +92,9 @@
 			if (idx < 0) {
 				listeners.push(callback);
 			}
+      return function() {
+        unsubscribe(route, callback);
+      }
 		}
 
 		function unsubscribe(route, callback) {
