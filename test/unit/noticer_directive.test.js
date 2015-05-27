@@ -7,11 +7,33 @@ describe('Noticer directive', function() {
   beforeEach(module('noticer'));
 
 
+
+
+  beforeEach(module(function($provide) {
+    $provide.provider('Noticer', function() {
+      this.$get = function() {
+        var notifications = [];
+        return {
+          on: function(route, handler) {
+
+          },
+          getUnread: function(route) {
+            return _.map(notifications, function(note) {
+              return note.read;
+            });
+          },
+          notify: function(note, route, level) {
+
+          }
+        }
+      }
+    });
+  }));
+
   beforeEach(inject(function(_$compile_, _$rootScope_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
   }));
-
 
   it('should render a notices container', function() {
     var tpl = '<div z-noticer></div>';

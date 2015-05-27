@@ -19,7 +19,7 @@
 
 			templateUrl: 'templates/notification.html',
 
-			controller: ['$scope', function($scope) {
+			controller: ['$scope', '$interval', function($scope, $interval) {
         _.assign($scope, {
           notifications: []
         });
@@ -27,10 +27,12 @@
         //Directive initialization
         init();
 
+				var unsubscribe = null;
 				function init() {
 					var route = $scope.curRoute = $scope.route || '';
-					Noticer.on(route, noticeHandler);
+					unsubscribe = Noticer.on(route, noticeHandler);
 					getPendingNotifications();
+					$scope.interval = $interval(intervalHandler, 100, 0, false);
 				}
 
         function getPendingNotifications() {
@@ -40,15 +42,28 @@
 					});
         }
 
+				function intervalHandler() {
+
+				}
+
 				function noticeHandler(notification) {
 					$scope.notifications.push(notification);
 				}
 
 				function scopeDestroyHandler() {
-					Noticer.off($scope.curRoute, noticeHandler);
+					//Noticer.off($scope.curRoute, noticeHandler);
+					if (typeof unsubscribe === 'function') {
+						unsubscribe();
+					}
 				}
 
-				$scope.$on('$destroy', scopeDestroyHandler);
+				$scope.$on('$destroy', function() {
+					scopeDestroyHandler();
+					if ($scope.interval) {
+						$interval.cancel($scope.interval);
+					}
+
+				});
 			}],
 
 			link: function($scope, $element) {

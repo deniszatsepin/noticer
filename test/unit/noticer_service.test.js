@@ -83,9 +83,15 @@ describe('Noticer render unit tests', function() {
     expect(handlers.onLoaded).toHaveBeenCalled();
   });
 
-  it('should returg unread notifications', function() {
-    var off = service.on('user/avatar', handler);
+  it('should return unread notifications', function() {
+		var route = 'user/messages';
+		_.each([1, 2, 3], function(i) {
+			service.notify('notification' + i, route);
+		});
 
+		var messages = service.getUnread(route);
+		expect(messages).toBeDefined();
+		expect(messages.length).toEqual(3);
   });
 
 });

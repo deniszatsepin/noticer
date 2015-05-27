@@ -13,14 +13,14 @@
 
 	function $noticerDomRenderProvider() {
 
-		this.$get = ['$window', '$document', '$q', NoticerDomRenderFactory];
+		this.$get = ['$window', '$document', '$q', NoticerFactory];
 
 	}
 
   var MAX_NOTICES_IN_QUEUE = 10;
   var MAX_NOTICES = 100;
 
-	function NoticerDomRenderFactory($window, $document, $q) {
+	function NoticerFactory($window, $document, $q) {
     var allNotifications = [];
 		var notificationQueues = {};
 		var subscribers = {};
@@ -47,7 +47,7 @@
 
     function push(queue, notification, max) {
       var MAX = max || MAX_NOTICES_IN_QUEUE;
-      if (queue.length > MAX) {
+      if (queue.length === MAX) {
         var removed = queue.shift();
         if (max) {
           var queue = notificationQueues[notification.route];
@@ -113,7 +113,7 @@
     function getUnread(route) {
       route = route || '';
       var queue = notificationQueues[route];
-      if (!queue.length) return [];
+      if (!queue || !queue.length) return [];
 
       return _.map(queue, function(notice) {
         if (!notice.read) {
